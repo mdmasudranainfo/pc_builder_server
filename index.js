@@ -4,7 +4,7 @@ var cors = require('cors')
 const port = 5000
 app.use(cors())
 app.use(cors())
-const { MongoClient, ServerApiVersion } = require('mongodb')
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb')
 
 const uri = `mongodb+srv://pc_builder:pc_builder@cluster0.wy2w6g2.mongodb.net/?retryWrites=true&w=majority`
 
@@ -39,6 +39,23 @@ function run() {
       res.send(result)
     })
     //
+
+    app.get('/products/:categories', async (req, res) => {
+      const categories = req.params.categories
+      const query = { Category: categories }
+      const result = await productCollection.find(query).toArray()
+      res.send(result)
+    })
+    //
+
+    app.get('/product/:id', async (req, res) => {
+      const id = req.params.id
+      const query = { _id: new ObjectId(id) }
+      const result = await productCollection.findOne(query)
+      res.send(result)
+    })
+    //
+
     app.get('/', (req, res) => {
       res.send('Hello World!')
     })
